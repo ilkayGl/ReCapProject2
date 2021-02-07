@@ -3,31 +3,31 @@ using System.Collections.Generic;
 using System.Text;
 using Core.DataAccsess.EntityFramework;
 using DataAccess.Abstract;
-using DataAccess.Context;
 using Entities.Concrete;
-using Entities.Dtos;
 using System.Linq;
+using Entities.DTOs;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : EfEntityRepositoryBase<Car, ReCapContext>, ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car, NorthwindContext>, ICarDal
     {
-        public List<CarDetail> GetCarDetails()
+        public List<CarDetailDto> GetCarDetails()
         {
-            using (ReCapContext context = new ReCapContext())
+            using (NorthwindContext context = new NorthwindContext())
             {
-                var carDetailsList = from c in context.Cars
-                             join b in context.Brands on c.BrandId equals b.Id
-                             join co in context.Colors on c.ColorId equals co.Id
-                             select new CarDetail
+                var result = from c in context.Cars
+                             join b in context.Brands on c.BrandId equals b.BrandId
+                             join cl in context.Colors on c.ColorId equals cl.ColorId
+                             select new CarDetailDto
                              {
-                                 Brand = b.Name,
-                                 Color = co.Name,
-                                 ModelYear = c.ModelYear,
-                                 DealyPrice = c.DealyPrice,
-                                 Description = c.Description
+                                 CarId = c.CarId,
+                                 Description = c.Description,
+                                 DailyPrice = c.DailyPrice,
+                                 BrandName = b.BrandName,
+                                 ColorName = cl.ColorName
+
                              };
-                return carDetailsList.ToList();
+                return result.ToList();
             }
         }
     }

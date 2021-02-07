@@ -2,7 +2,6 @@
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
-using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using DataAccess.Concrete.EntityFramework;
@@ -11,58 +10,54 @@ namespace ConsoleUI
 {
     class Program
     {
-        
-            
+
+
         static void Main(string[] args)
         {
-            Car newCar = new Car {  BrandId = 1, ColorId = 1, DealyPrice = 600, Description = "Yeni Araba açıklama", ModelYear = "1990" };
-            Car updateCar = new Car { Id = 1, BrandId = 1, ColorId = 2, DealyPrice = 900, Description = "Güncellenen araba fiyat ve rengi değişti  Araba açıklama", ModelYear = "1990" };
-
 
             CarManager carManager = new CarManager(new EfCarDal());
 
-            
+            //CarAddUpdateDeleteTest(carManager);
 
-            Console.WriteLine("---------------- İlk Araba Listesi ------------------");
-            ShowCarList();
-
-            Console.WriteLine();
-            newCar = carManager.Add(newCar);
-            Console.WriteLine("---------------- Yeni Araba Eklendi ----------------");
-            ShowCarList();
-            Console.WriteLine();
-            newCar.Description = "Yeni araba açıklama Güncellendi";
-            carManager.Update(newCar);
-            Console.WriteLine("---------------- Yeni Araba Güncellendi ----------------");
-            ShowCarList();
-            Console.WriteLine();
-            carManager.Delete(newCar);
-            Console.WriteLine("---------------- Yeni Araba Silindi ----------------");
-            ShowCarList();
-
-
-            //Console.WriteLine();
-            //CarDetail carDto1 = carManager.GetAllCarsDtoById(new InMemoryBrandDal(), new InMemoryColorDal(), 1);
-            //Console.WriteLine("---------------- Idsi 1 olan Araba ----------------");
-            //Console.WriteLine("Markası :  {0}  Model Yılı : {1}  Rengi : {2}  Fiyatı : {3}  Açıklaması : {4}", carDto1.Brand, carDto1.ModelYear.ToString(), carDto1.Color, carDto1.DealyPrice, carDto1.Description);
-
-
-
-
-
-
-            void ShowCarList()
+            foreach (var car in carManager.GetCarDetails())
             {
-                List<CarDetail> carDtos = carManager.GetAllCarDetail();
-                foreach (CarDetail carDto in carDtos)
-                {
-                    Console.WriteLine("Markası :  {0}  Model Yılı : {1}  Rengi : {2}  Fiyatı : {3}  Açıklaması : {4}"  , carDto.Brand, carDto.ModelYear.ToString(), carDto.Color, carDto.DealyPrice, carDto.Description);
-                }
+                //System.Console.WriteLine("Marka:{0} Model:{1} Kiralama Ücreti:{2}",car.Description,car.DailyPrice ); //GetAll için
+                System.Console.WriteLine("Araba Adı:{0} / Marka Adı:{1} / Renk Adı:{2} / Kiralama Ücreti:{3}", car.Description, car.BrandName, car.ColorName, car.DailyPrice);
             }
 
         }
 
+        private static void CarAddUpdateDeleteTest(CarManager carManager)
+        {
+            carManager.Add(new Car
+            {
+                BrandId = 2,
+                ColorId = 3,
+                Description = "Fiat",
+                DailyPrice = 120,
+                ModelYear = 2015
+            });
 
+            carManager.Update(new Car
+            {
+                CarId = 3,
+                BrandId = 2,
+                ColorId = 1,
+                Description = "Reno",
+                DailyPrice = 120,
+                ModelYear = 2016
+            });
+
+            carManager.Delete(new Car
+            {
+                CarId = 3,
+                BrandId = 2,
+                ColorId = 1,
+                Description = "Reno",
+                DailyPrice = 120,
+                ModelYear = 2016
+            });
+        }
 
     }
 }

@@ -1,6 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
-using Entities.Dtos;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,10 +10,12 @@ namespace Bussines.Abstract
     public interface ICarService
     {
         List<Car> GetAll();
-        List<Car> GetAllCarDetail();
-        Car GetById(int Id);
-        Car Add(Car car);
-        Car Update(Car car);
+        List<Car> GetCarsByCarId(int carId);
+        List<Car> GetCarsByBrandId(int brandId);
+        List<Car> GetCarsByColorId(int colorId);
+        List<CarDetailDto> GetCarDetails();
+        void Add(Car car);
+        void Update(Car car);
         void Delete(Car car);
     }
 }

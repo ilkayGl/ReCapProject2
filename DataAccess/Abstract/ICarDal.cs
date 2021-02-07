@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Core.DataAccsess;
-using Entities.Dtos;
+using Entities.DTOs;
 
 namespace DataAccess.Abstract
 {
-    public interface ICarDal : IEntitiyRepository<Car>
+    public interface ICarDal : IEntityRepository<Car>
     {
-        List<CarDetail> GetCarDetails();
+        List<CarDetailDto> GetCarDetails();
     }
 }

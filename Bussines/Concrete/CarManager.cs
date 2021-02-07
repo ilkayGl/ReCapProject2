@@ -1,7 +1,7 @@
 ﻿using Bussines.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using Entities.Dtos;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,39 +18,52 @@ namespace Bussines.Concrete
             _carDal = carDal;
         }
 
-        public Car Add(Car car)
+        public List<Car> GetAll()
         {
-            return _carDal.Add(car);
+            return _carDal.GetAll();
+        }
+
+        public List<Car> GetCarsByCarId(int carId)
+        {
+            return _carDal.GetAll(c => c.CarId == carId);
+        }
+
+        public List<Car> GetCarsByBrandId(int brandId)
+        {
+            return _carDal.GetAll(c => c.BrandId == brandId);
+        }
+
+        public List<Car> GetCarsByColorId(int colorId)
+        {
+            return _carDal.GetAll(c => c.ColorId == colorId);
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            return _carDal.GetCarDetails();
+        }
+
+        public void Add(Car car)
+        {
+            if (car.Description.Length >= 2 && car.DailyPrice > 0)
+            {
+                _carDal.Add(car);
+            }
+            else
+            {
+                throw new Exception("Araç Modeli en az iki karakter ve Kiralama Ücreti sıfır liradan yüksek olmalıdır.");
+            }
+
+        }
+
+        public void Update(Car car)
+        {
+            _carDal.Update(car);
         }
 
         public void Delete(Car car)
         {
             _carDal.Delete(car);
-        }
-
-        public List<Car> GetAll()
-        {
-            return _carDal.GetList();
-        }
-
-        public List<CarDetail> GetAllCarDetail()
-        {
-            return _carDal.GetCarDetails();
-        }
-
-        public Car GetById(int Id)
-        {
-            return _carDal.Get(c => c.Id == Id);
-        }
-
-        public Car Update(Car car)
-        {
-            return _carDal.Update(car);
-        }
-
-        List<Car> ICarService.GetAllCarDetail()
-        {
-            throw new NotImplementedException();
         }
     }
 }
