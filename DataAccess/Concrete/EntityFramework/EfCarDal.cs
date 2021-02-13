@@ -9,23 +9,23 @@ using Entities.DTOs;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : EfEntityRepositoryBase<Car, NorthwindContext>, ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car, CarDbContext>, ICarDal
     {
         public List<CarDetailDto> GetCarDetails()
         {
-            using (NorthwindContext context = new NorthwindContext())
+            using (CarDbContext context = new CarDbContext())
             {
-                var result = from c in context.Cars
-                             join b in context.Brands on c.BrandId equals b.BrandId
-                             join cl in context.Colors on c.ColorId equals cl.ColorId
+                var result = from ca in context.Cars
+                             join co in context.Colors
+                             on ca.ColorId equals co.ColorId
+                             join b in context.Brands
+                             on ca.BrandId equals b.BrandId
                              select new CarDetailDto
                              {
-                                 CarId = c.CarId,
-                                 Description = c.Description,
-                                 DailyPrice = c.DailyPrice,
+                                 CarName = ca.CarName,
                                  BrandName = b.BrandName,
-                                 ColorName = cl.ColorName
-
+                                 ColorName = co.ColorName,
+                                 DailyPrice = ca.DailyPrice
                              };
                 return result.ToList();
             }

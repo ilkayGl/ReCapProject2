@@ -5,6 +5,7 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using DataAccess.Concrete.EntityFramework;
+using Business.Concrete;
 
 namespace ConsoleUI
 {
@@ -16,47 +17,67 @@ namespace ConsoleUI
         {
 
             CarManager carManager = new CarManager(new EfCarDal());
-
-            //CarAddUpdateDeleteTest(carManager);
-
-            foreach (var car in carManager.GetCarDetails())
-            {
-                //System.Console.WriteLine("Marka:{0} Model:{1} Kiralama Ücreti:{2}",car.Description,car.DailyPrice ); //GetAll için
-                System.Console.WriteLine("Araba Adı:{0} / Marka Adı:{1} / Renk Adı:{2} / Kiralama Ücreti:{3}", car.Description, car.BrandName, car.ColorName, car.DailyPrice);
-            }
+            //GetAllCars(rentACarManager);
+            //AddCar(rentACarManager);
+            //DeleteCar(rentACarManager);
+            //UpdateCar(rentACarManager);
+            //GetAllCarsDetail(carManager);
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            Rental rental = new Rental() { CarId = 6, CustomerId = 1, RentDate = DateTime.Now };
+            rentalManager.Add(rental);
 
         }
 
-        private static void CarAddUpdateDeleteTest(CarManager carManager)
+        private static void GetAllCarsDetail(CarManager carManager)
         {
-            carManager.Add(new Car
+            foreach (var car in carManager.GetCarDetails().Data)
             {
-                BrandId = 2,
-                ColorId = 3,
-                Description = "Fiat",
-                DailyPrice = 120,
-                ModelYear = 2015
-            });
+                Console.WriteLine(car.BrandName + " : " + car.CarName + " - " + car.ColorName + " Color" + " = " + car.DailyPrice + " Liras For a Day");
+            }
+        }
 
-            carManager.Update(new Car
+        private static void UpdateCar(CarManager carManager)
+        {
+            foreach (var car in carManager.GetAll().Data)
             {
-                CarId = 3,
-                BrandId = 2,
-                ColorId = 1,
-                Description = "Reno",
-                DailyPrice = 120,
-                ModelYear = 2016
-            });
+                if (car.CarId == 2006)
+                {
+                    var updatedCar = car;
+                    updatedCar.CarName = "Volvo s60";
+                    carManager.Update(updatedCar);
+                }
+            }
+        }
 
-            carManager.Delete(new Car
+        private static void DeleteCar(CarManager carManager)
+        {
+            foreach (var car in carManager.GetAll().Data)
             {
-                CarId = 3,
-                BrandId = 2,
-                ColorId = 1,
-                Description = "Reno",
-                DailyPrice = 120,
-                ModelYear = 2016
-            });
+                if (car.CarId == 2006)
+                {
+                    carManager.Delete(car);
+                }
+            }
+        }
+
+        private static void AddCar(CarManager carManager)
+        {
+            Car car2 = new Car { BrandId = 22, CarName = "Accent-Era", ColorId = 4, DailyPrice = 90, ModelYear = 2010, Description = "Min Money", Rentable = false };
+            carManager.Add(car2);
+            Console.WriteLine("After Added Database");
+            foreach (var car in carManager.GetAll().Data)
+            {
+                Console.WriteLine(car.CarName + ": DailyPrice= " + car.DailyPrice);
+            }
+        }
+
+        private static void GetAllCars(CarManager carManager)
+        {
+            Console.WriteLine("All Cars List");
+            foreach (var car in carManager.GetAll().Data)
+            {
+                Console.WriteLine(car.CarName + ": DailyPrice= " + car.DailyPrice);
+            }
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Core.DataAccsess.EntityFramework;
+﻿using Core.DataAccsess;
+using Core.DataAccsess.EntityFramework;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfColorDal : EfEntityRepositoryBase<Color, CarDbContext>, IColorDal
+    public class EfRentalDal : EfEntityRepositoryBase<Rental, CarDbContext>, IEntityRepository<Rental>, IRentalDal
     {
 
     }
