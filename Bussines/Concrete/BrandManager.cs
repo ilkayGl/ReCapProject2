@@ -18,16 +18,21 @@ namespace Bussines.Concrete
             _brandDal = brandDal;
         }
 
-        public IResult Add(Brand entity)
+
+        public IResult Add(Brand brand)
         {
-            _brandDal.Add(entity);
-            return new SuccessResult(Messages.BrandAdded);
+            if (brand.BrandName.Length > 2)
+            {
+                _brandDal.Add(brand);
+                return new SuccessResult(Messages.AddedBrand);
+            }
+            return new ErrorResult(Messages.FailedBrandAddOrUpdate);
         }
 
-        public IResult Delete(Brand entity)
+        public IResult Delete(Brand brand)
         {
-            _brandDal.Delete(entity);
-            return new SuccessResult(Messages.BrandDeleted);
+            _brandDal.Delete(brand);
+            return new SuccessResult(Messages.DeletedBrand);
         }
 
         public IDataResult<List<Brand>> GetAll()
@@ -35,15 +40,19 @@ namespace Bussines.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
         }
 
-        public IDataResult<Brand> GetById(int brandId)
+        public IDataResult<Brand> GetById(int id)
         {
-            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.BrandId == brandId));
+            return new SuccessDataResult<Brand>(_brandDal.Get(c => c.BrandId == id));
         }
 
-        public IResult Update(Brand entity)
+        public IResult Update(Brand brand)
         {
-            _brandDal.Update(entity);
-            return new SuccessResult(Messages.BrandModified);
+            if (brand.BrandName.Length > 2)
+            {
+                _brandDal.Update(brand);
+                return new SuccessResult(Messages.UpdatedBrand);
+            }
+            return new ErrorResult(Messages.FailedBrandAddOrUpdate);
         }
     }
 }

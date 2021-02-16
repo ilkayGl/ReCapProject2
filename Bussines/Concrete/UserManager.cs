@@ -18,32 +18,32 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-        public IResult Add(User entity)
+        public IResult Add(User user)
         {
-            _userDal.Add(entity);
-            return new SuccessResult(Messages.UserAdded);
+            _userDal.Add(user);
+            return new SuccessResult(Messages.AddedRental);
         }
 
-        public IResult Delete(User entity)
+        public IResult Delete(User user)
         {
-            _userDal.Delete(entity);
-            return new SuccessResult(Messages.UserDeleted);
+            _userDal.Delete(user);
+            return new SuccessResult(Messages.DeletedRental);
         }
 
         public IDataResult<List<User>> GetAll()
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UsersListed);
+            return new SuccessDataResult<List<User>>(_userDal.GetAll());
         }
 
         public IDataResult<User> GetById(int id)
         {
-            return new SuccessDataResult<User>(_userDal.Get(u => u.Id == id), Messages.UserListedById);
+            return new SuccessDataResult<User>(_userDal.Get(I => I.UserId == id));
         }
 
-        public IResult Update(User entity)
+        public IResult Update(User user)
         {
-            _userDal.Update(entity);
-            return new SuccessResult(Messages.UserModified);
+            _userDal.Update(user);
+            return new SuccessResult(Messages.UpdatedRental);
         }
     }
 }

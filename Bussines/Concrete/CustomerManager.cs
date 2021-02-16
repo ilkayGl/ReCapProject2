@@ -12,39 +12,38 @@ namespace Business.Concrete
     public class CustomerManager : ICustomerService
     {
         ICustomerDal _customerDal;
+
         public CustomerManager(ICustomerDal customerDal)
         {
             _customerDal = customerDal;
         }
-        public IResult Add(Customer entity)
+
+        public IResult Add(Customer customer)
         {
-            _customerDal.Add(entity);
-            return new SuccessResult(Messages.CustomerAdded);
+            _customerDal.Add(customer);
+            return new SuccessResult(Messages.AddedCustomer);
         }
 
-        public IResult Delete(Customer entity)
+        public IResult Delete(Customer customer)
         {
-            _customerDal.Delete(entity);
-            return new SuccessResult(Messages.CustomerDeleted);
+            _customerDal.Delete(customer);
+            return new SuccessResult(Messages.DeletedCustomer);
         }
 
         public IDataResult<List<Customer>> GetAll()
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CustomersListed);
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
-
-
 
         public IDataResult<Customer> GetById(int id)
         {
-            return new SuccessDataResult<Customer>(_customerDal.Get(c => c.UserId == id), Messages.CustomerListedById);
+            return new SuccessDataResult<Customer>(_customerDal.Get(c => c.CustomerId == id));
         }
 
-
-        public IResult Update(Customer entity)
+        public IResult Update(Customer customer)
         {
-            _customerDal.Update(entity);
-            return new SuccessResult(Messages.CustomerModified);
+            _customerDal.Update(customer);
+            return new SuccessResult(Messages.UpdatedCustomer);
         }
     }
 }
