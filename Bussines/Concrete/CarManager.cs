@@ -1,5 +1,7 @@
 ﻿using Bussines.Abstract;
 using Bussines.Constants;
+using Bussines.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -21,17 +23,20 @@ namespace Bussines.Concrete
             _carDal = carDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.DailyPrice > 0)
-            {
-                _carDal.Add(car);
-                return new SuccessResult(Messages.AddedCar);
-            }
-            else
-            {
-                return new ErrorResult(Messages.FailedCarAddOrUpdate);
-            }
+            //if (car.DailyPrice > 0)
+            //{
+            //    _carDal.Add(car);
+            //    return new SuccessResult(Messages.AddedCar);
+            //}
+            //else
+            //{
+            //    return new ErrorResult(Messages.FailedCarAddOrUpdate);
+            //}
+            _carDal.Add(car);
+            return new SuccessResult(Messages.AddedCar);
         }
 
         public IResult Delete(Car car)
@@ -57,17 +62,21 @@ namespace Bussines.Concrete
 
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
-            if (car.DailyPrice > 0)
-            {
-                _carDal.Update(car);
-                return new SuccessResult(Messages.UpdatedCar);
-            }
-            else
-            {
-                return new ErrorResult(Messages.FailedCarAddOrUpdate);
-            }
+            //if (car.DailyPrice > 0)
+            //{
+            //    _carDal.Update(car);
+            //    return new SuccessResult(Messages.UpdatedCar);
+            //}
+            //else
+            //{
+            //    return new ErrorResult(Messages.FailedCarAddOrUpdate);
+            //}
+            _carDal.Update(car);
+            return new SuccessResult(Messages.UpdatedCar);
+
         }
     }
 }
