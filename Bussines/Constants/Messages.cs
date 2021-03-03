@@ -1,45 +1,75 @@
-﻿using System;
+﻿using Core.Entities.Concrete;
+using Entities.DTOs;
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Bussines.Constants
 {
     public static class Messages
     {
-        public static string AddedBrand = "Marka başarıyla eklendi.";
-        public static string DeletedBrand = "Marka başarıyla silindi.";
-        public static string UpdatedBrand = "Marka başarıyla güncellendi.";
-        public static string FailedBrandAddOrUpdate = "Lütfen marka isminin uzunluğunu 2 karakterden fazla giriniz.";
+        //Brand Messages
+        public static string BrandAdded = "Marka Eklendi";
+        public static string BrandUpdated = "Marka Güncellendi";
+        public static string BrandDeleted = "Marka Silindi";
+        public static string BrandsListed = "Markalar Listelendi";
 
-        public static string AddedCar = "Araba başarıyla eklendi.";
-        public static string DeletedCar = "Araba başarıyla silindi.";
-        public static string UpdatedCar = "Araba başarıyla güncellendi.";
-        public static string FailedCarAddOrUpdate = "Lütfen günlük fiyat kısmını 0'dan büyük giriniz.";
+        //Car Messages
+        public static string CarAdded = "Araba Eklendi";
+        public static string CarUpdated = "Araba Güncellendi";
+        public static string CarDeleted = "Araba Silindi";
+        public static string CarsListed = "Arabalar Listelendi";
 
-        public static string AddedColor = "Renk başarıyla eklendi.";
-        public static string DeletedColor = "Renk başarıyla silindi.";
-        public static string UpdatedColor = "Renk başarıyla güncellendi.";
+        //Color Messages
+        public static string ColorAdded = "Renk Eklendi";
+        public static string ColorUpdated = "Renk Güncellendi";
+        public static string ColorDeleted = "Renk Silindi";
+        public static string ColorsListed = "Renkler Listelendi";
 
-        public static string AddedCustomer = "Müşteri başarıyla eklendi.";
-        public static string DeletedCustomer = "Müşteri başarıyla silindi.";
-        public static string UpdatedCustomer = "Müşteri başarıyla güncellendi.";
+        //User Messages
+        public static string UserAdded = "Kullanıcı Eklendi";
+        public static string UserUpdated = "Kullanıcı Güncellendi";
+        public static string UserDeleted = "Kullanıcı Silindi";
+        public static string UsersListed = "Kullanıcılar Listelendi";
+
+        //Customer Messages
+        public static string CustomerAdded = "Müşteri Eklendi";
+        public static string CustomerUpdated = "Müşteri Güncellendi";
+        public static string CustomerDeleted = "Müşteri Silindi";
+        public static string CustomersListed = "Müşteriler Listelendi";
+
+        //CarImage Messages
+        public static string CarImageAdded = "Car Image Eklendi";
+        public static string CarImageUpdated = "Araba Resimi Güncellendi";
+        public static string CarImageDeleted = "Araba Resimi Silindi";
+        public static string CarImagesListed = "Araba Resimleri Listelendi";
+
+        //Rental Messages
+        public static string RentalAdded = "Kira Bilgileri Eklendi";
+        public static string RentalUpdated = "Kira Bilgileri Güncellendi";
+        public static string RentalDeleted = "Kira Bilgileri Silindi";
+        public static string RentalsListed = "Kira Bilgileri Listelendi";
+        public static string RentalReturned = "Kiralanan Araç Başarıyla İade Edildi";
 
 
-        public static string AddedUser = "Kullanıcı başarıyla eklendi.";
-        public static string DeletedUser = "Kullanıcı başarıyla silindi.";
-        public static string UpdatedUser = "Kullanıcı başarıyla güncellendi.";
+
+        //Error Messages
+        public static string BrandNameInvalid = "Marka Adı Geçersiz";
+        public static string CarNameInvalid = "Araç Adı Geçersiz";
+        public static string ColorNameInvalid = "Renk Adı Geçersiz";
+        public static string RentalInvalid = "İstediğiniz Araba Mevcut Değil";
+        public static string MaintenanceTime = "Bakım Modu";
+        public static string CarImageCountOfCarIdError = "Bir arabada sadece 5 fotoğraf olabilir";
+        public static string CarImagePathAlreadyExists = "Araba yolu zaten var";
+        public static string AuthorizationDenied = "Erişim reddedildi. Yetkili değilsin.";
+        public static string UserRegistered = "Kayıt oldu.";
+        public static string UserNotFound = "Kullanıcı bulunamadı.";
+        public static string PasswordError = "Parola hatası.";
+        public static string SuccessfulLogin = "Başarılı giriş.";
+        public static string UserAlreadyExists = "Kullanıcı mevcut.";
+        public static string AccessTokenCreated = "Token oluşturuldu.";
 
 
-        public static string AddedRental = "Araba Kiralama işlemi baraşıyla gerçekleşti.";
-        public static string DeletedRental = "Araba Kiralama işlemi iptal edildi.";
-        public static string UpdatedRental = "Araba Kiralama işlemi güncellendi.";
-        public static string FailedRentalAddOrUpdate = "Bu araba henüz teslim edilmediği için kiralayamazsınız.";
-        public static string ReturnedRental = "Kiraladığınız araç teslim edildi.";
-
-        public static string FailAddedImageLimit = "Resim Limitini Aşamassın";
-        public static string ImagesAdded = "Resim Eklendi";
-        public static string ErrorDeleted = "Ekleme İşlemi Başarısız";
-        public static string SuccessDeleted = "Silme İşlemi Başarılı";
-        public static string SuccessListed = "Listeleme Başarılı oldu";
     }
 }

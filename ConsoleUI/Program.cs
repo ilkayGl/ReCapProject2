@@ -23,29 +23,29 @@ namespace ConsoleUI
             //UserManager userManager = new UserManager(new EfUserDal());
             //RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
-            CarTest();
+            //CarTest();
 
         }
 
-        private static void CarTest()
-        {
-            CarManager carManager = new CarManager(new EfCarDal());
+        //private static void CarTest()
+        //{
+        //    CarManager carManager = new CarManager(new EfCarDal());
 
-            var result = carManager.GetCarDetails();
-            if (result.Success == true)
-            {
-                foreach (var car in result.Data)
-                {
-                    Console.WriteLine("Ürün Id : " + car.CarId + " ---- " + "Araç Açıklaması : " + car.Descriptions);
-                }
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
+        //    var result = carManager.GetCarDetails();
+        //    if (result.Success == true)
+        //    {
+        //        foreach (var car in result.Data)
+        //        {
+        //            Console.WriteLine("Ürün Id : " + car.Id + " ---- " + "Araç Açıklaması : " + car.Descriptions);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine(result.Message);
+        //    }
 
 
-        }
+
 
     }
 }

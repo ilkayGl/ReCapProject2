@@ -1,4 +1,5 @@
-﻿using Bussines.Abstract;
+﻿using Business.BusinessAspects.Autofac;
+using Bussines.Abstract;
 using Bussines.Constants;
 using Bussines.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -15,42 +16,43 @@ namespace Bussines.Concrete
     {
         IColorDal _colorDal;
 
-        public ColorManager(IColorDal brandDal)
+        public ColorManager(IColorDal colorDal)
         {
-            _colorDal = brandDal;
+            _colorDal = colorDal;
         }
-
+        [SecuredOperation("color.add,admin")]
         [ValidationAspect(typeof(ColorValidator))]
-        public IResult Add(Color entity)
+        public IResult Add(Color color)
         {
-            _colorDal.Add(entity);
-            return new SuccessResult(Messages.AddedColor);
+            _colorDal.Add(color);
+            return new SuccessResult(Messages.ColorAdded);
         }
 
+        [SecuredOperation("color.update,admin")]
+        [ValidationAspect(typeof(ColorValidator))]
+        public IResult Update(Color color)
+        {
+            _colorDal.Update(color);
+            return new SuccessResult(Messages.ColorUpdated);
+        }
+
+        [SecuredOperation("color.delete,admin")]
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
-            return new SuccessResult(Messages.DeletedColor);
-
+            return new SuccessResult(Messages.ColorDeleted);
         }
 
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
-
         }
 
-        public IDataResult<Color> GetById(int id)
+        public IDataResult<Color> GetById(int colorId)
         {
-            return new SuccessDataResult<Color>(_colorDal.Get(c => c.ColorId == id));
+            return new SuccessDataResult<Color>(_colorDal.Get(co => co.ColorId == colorId));
         }
 
-        [ValidationAspect(typeof(ColorValidator))]
-        public IResult Update(Color entity)
-        {
-            _colorDal.Update(entity);
-            return new SuccessResult(Messages.UpdatedColor);
-
-        }
     }
 }

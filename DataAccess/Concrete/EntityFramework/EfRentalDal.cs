@@ -13,30 +13,31 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfRentalDal : EfEntityRepositoryBase<Rental, CarDbContext>, IEntityRepository<Rental>, IRentalDal
     {
-        public List<RentalDetailDto> GetCarDetails(Expression<Func<Rental, bool>> filter = null)
+        public List<RentalDetailDto> GetRentalDetails(Expression<Func<Rental, bool>> filter = null)
         {
             using (CarDbContext context = new CarDbContext())
             {
-                var result = from r in filter == null ? context.Rentals : context.Rentals.Where(filter)
-                             join c in context.Cars
-                             on r.CarId equals c.CarId
+                var result = from r in filter is null ? context.Rentals : context.Rentals.Where(filter)
                              join cu in context.Customers
                              on r.CustomerId equals cu.CustomerId
-                             join b in context.Brands
-                             on c.BrandId equals b.BrandId
+                             join c in context.Cars
+                             on r.CarId equals c.CarId
                              join u in context.Users
                              on cu.UserId equals u.UserId
                              select new RentalDetailDto
                              {
                                  RentalId = r.RentalId,
-                                 CarName = b.BrandName,
-                                 CustomerName = cu.CustomerName,
-                                 UserName = u.FirstName + " " + u.LastName,
+                                 CarName = c.CarName,
+                                 FirstName = u.FirstName,
+                                 LastName = u.LastName,
+                                 CompanyName = cu.CompanyName,
                                  RentDate = r.RentDate,
                                  ReturnDate = r.ReturnDate
                              };
                 return result.ToList();
             }
         }
+
+        
     }
 }

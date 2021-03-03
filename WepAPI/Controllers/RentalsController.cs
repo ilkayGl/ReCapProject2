@@ -13,6 +13,7 @@ namespace WepAPI.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
+
         IRentalService _rentalService;
 
         public RentalsController(IRentalService rentalService)
@@ -20,39 +21,7 @@ namespace WepAPI.Controllers
             _rentalService = rentalService;
         }
 
-        [HttpPost("add")]
-        public IActionResult Add(Rental rental)
-        {
-            var result = _rentalService.Add(rental);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpPut("update")]
-        public IActionResult Update(Rental rental)
-        {
-            var result = _rentalService.Update(rental);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpDelete("delete")]
-        public IActionResult Delete(Rental rental)
-        {
-            var result = _rentalService.Delete(rental);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
+        //-----------------------GET---------------------------
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
@@ -65,9 +34,9 @@ namespace WepAPI.Controllers
         }
 
         [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(int rentalId)
         {
-            var result = _rentalService.GetById(id);
+            var result = _rentalService.GetById(rentalId);
             if (result.Success)
             {
                 return Ok(result);
@@ -75,10 +44,43 @@ namespace WepAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getallrentaldetails")]
-        public IActionResult GetAllCarDetails()
+        [HttpGet("getbycarid")]
+        public IActionResult GetRentalByCarId(int carId)
         {
-            var result = _rentalService.GetRentalDetails();
+            var result = _rentalService.GetRentalByCarId(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getbycustomerid")]
+        public IActionResult GetRentalByCustomerId(int customerId)
+        {
+            var result = _rentalService.GetRentalByCustomerId(customerId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getbyrentdate")]
+        public IActionResult GetRentalByRentDate(DateTime rentDate)
+        {
+            var result = _rentalService.GetRentalByRentDate(rentDate);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getbyreturndate")]
+        public IActionResult GetRentalByReturnDate(DateTime returnDate)
+        {
+            var result = _rentalService.GetRentalByReturnDate(returnDate);
             if (result.Success)
             {
                 return Ok(result);
@@ -87,11 +89,13 @@ namespace WepAPI.Controllers
         }
 
 
-        [HttpGet("getrentalbycar")]
-        public IActionResult GetCarByColor(int id)
-        {
 
-            var result = _rentalService.GetRentalDetails(I => I.CarId == id);
+        //-----------------------POST--------------------------
+
+        [HttpPost("add")]
+        public IActionResult Add(Rental rental)
+        {
+            var result = _rentalService.Add(rental);
             if (result.Success)
             {
                 return Ok(result);
@@ -99,11 +103,21 @@ namespace WepAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getrentalbycustomer")]
-        public IActionResult GetCarByBrand(int id)
+        [HttpPost("update")]
+        public IActionResult Update(Rental rental)
         {
+            var result = _rentalService.Update(rental);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
-            var result = _rentalService.GetRentalDetails(I => I.CustomerId == id);
+        [HttpPost("delete")]
+        public IActionResult Delete(Rental rental)
+        {
+            var result = _rentalService.Delete(rental);
             if (result.Success)
             {
                 return Ok(result);
