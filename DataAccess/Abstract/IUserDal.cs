@@ -9,7 +9,6 @@ namespace DataAccess.Abstract
 {
     public interface IUserDal : IEntityRepository<User>
     {
-        //List<CarDetailDto> GetCarDetails(Expression<Func<User, bool>> filter = null);
         List<OperationClaim> GetClaims(User user);
     }
 }
