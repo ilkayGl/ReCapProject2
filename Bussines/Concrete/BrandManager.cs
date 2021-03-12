@@ -7,6 +7,7 @@ using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +23,6 @@ namespace Bussines.Concrete
             _brandDal = brandDal;
         }
 
-        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
@@ -30,31 +30,31 @@ namespace Bussines.Concrete
             return new SuccessResult(Messages.BrandAdded);
         }
 
-        [SecuredOperation("product.add,admin")]
-        [ValidationAspect(typeof(BrandValidator))]
-        public IResult Update(Brand brand)
-        {
-            _brandDal.Update(brand);
-            return new SuccessResult(Messages.BrandUpdated);
-        }
-
-        [SecuredOperation("product.add,admin")]
-        [ValidationAspect(typeof(BrandValidator))]
         public IResult Delete(Brand brand)
         {
             _brandDal.Delete(brand);
-            return new SuccessResult(Messages.BrandDeleted);
+            return new SuccessResult(Messages.BrandDelete);
+        }
+
+        public IResult Update(Brand brand)
+        {
+            _brandDal.Update(brand);
+            return new SuccessResult(Messages.BrandUpdate);
+        }
+
+        public IDataResult<Brand> Get(int brandId)
+        {
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.BrandId == brandId), Messages.BrandIdListed);
         }
 
         public IDataResult<List<Brand>> GetAll()
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandListed);
         }
 
-        public IDataResult<Brand> GetById(int brandId)
+        public IDataResult<List<BrandDetailDto>> GetBrandDetails()
         {
-            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.BrandId == brandId));
+            return new SuccessDataResult<List<BrandDetailDto>>(_brandDal.GetBrandDetails(), Messages.BrandListed);
         }
-
     }
 }

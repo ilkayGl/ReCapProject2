@@ -10,18 +10,13 @@ namespace Bussines.ValidationRules.FluentValidation
     {
         public CarValidator()
         {
-            RuleFor(c => c.CarName).NotEmpty();
-            RuleFor(c => c.CarName).MinimumLength(2);
-            RuleFor(c => c.DailyPrice).NotEmpty();
-            RuleFor(c => c.DailyPrice).GreaterThan(0);
-            RuleFor(c => c.ModelYear).NotEmpty();
-            RuleFor(c => c.ModelYear).Must(YearCheck).WithMessage("Model Yılı 1900'den Az Olamaz");
+            RuleFor(p => p.CarName).NotEmpty();
+            //RuleFor(p => p.CarName).MinimumLength(2);
+            RuleFor(p => p.DailyPrice).NotEmpty();
+            //RuleFor(p => p.DailyPrice).GreaterThan(0);
         }
 
-        private bool YearCheck(string arg)
-        {
-            return (arg.StartsWith("19") || arg.StartsWith("20"));
-        }
+        
 
     }
 }

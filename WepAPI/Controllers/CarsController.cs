@@ -16,46 +16,58 @@ namespace WepAPI.Controllers
             _carService = carService;
         }
 
-        //-----------------------GET------------------------------
+
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
             var result = _carService.GetAll();
+
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
-
-
         }
 
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int carId)
+
+
+        [HttpGet("getcarsbybrandid")]
+
+        public IActionResult GetCarsByBrandId(int id)
         {
-            var result = _carService.GetById(carId);
+            var result = _carService.GetCarsByBrandId(id);
+
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
+
         }
 
-        [HttpGet("getbybrandid")]
-        public IActionResult GetCarsByBrandId(int brandId)
+        [HttpGet("getcarsbycolorid")]
+
+        public IActionResult GetCarsByColorId(int id)
         {
-            var result = _carService.GetCarsByBrandId(brandId);
+
+            var result = _carService.GetCarsByColorId(id);
+
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
+
         }
 
-        [HttpGet("getbycolorid")]
-        public IActionResult GetCarsByColorId(int colorId)
+
+        [HttpGet("getcardetails")]
+
+        public IActionResult GetCarDetails()
         {
-            var result = _carService.GetCarsByColorId(colorId);
+            var result = _carService.GetCarDetails();
+
             if (result.Success)
             {
                 return Ok(result);
@@ -63,35 +75,13 @@ namespace WepAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbymodelyear")]
-        public IActionResult GetByModelYear(string modelYear)
-        {
-            var result = _carService.GetByModelYear(modelYear);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getbydailyprice")]
-        public IActionResult GetByDailyPrice(decimal min, decimal max)
-        {
-            var result = _carService.GetByDailyPrice(min, max);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-
-        //----------------------POST------------------------
 
         [HttpPost("add")]
+
         public IActionResult Add(Car car)
         {
             var result = _carService.Add(car);
+
             if (result.Success)
             {
                 return Ok(result);
@@ -99,21 +89,27 @@ namespace WepAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(Car car)
-        {
-            var result = _carService.Update(car);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
 
         [HttpPost("delete")]
+
         public IActionResult Delete(Car car)
         {
             var result = _carService.Delete(car);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
+        [HttpPost("update")]
+
+        public IActionResult Update(Car car)
+        {
+            var result = _carService.Update(car);
+
             if (result.Success)
             {
                 return Ok(result);

@@ -2,6 +2,9 @@
 using Bussines.Abstract;
 using Bussines.Constants;
 using Bussines.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -24,70 +27,73 @@ namespace Bussines.Concrete
             _carDal = carDal;
         }
 
-        [SecuredOperation("car.add,admin")]
+        //[SecuredOperation("admin,car.add")]
         [ValidationAspect(typeof(CarValidator))]
+        //[CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
+
             _carDal.Add(car);
+
             return new SuccessResult(Messages.CarAdded);
+
+
         }
 
-        [SecuredOperation("car.delete,admin")]
+        [SecuredOperation("admin")]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
-            return new SuccessResult(Messages.CarDeleted);
+            return new SuccessResult(Messages.CarDelete);
         }
 
-        public IDataResult<List<Car>> GetAll()
-        {
-            if (DateTime.Now.Hour == 24)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
-            }
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
-        }
-
-        public IDataResult<List<CarDetailDto>> GetByDailyPrice(decimal min, decimal max)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.DailyPrice >= min && c.DailyPrice <= max));
-        }
-
-        public IDataResult<Car> GetById(int carId)
-        {
-            return new SuccessDataResult<Car>(_carDal.Get(c => c.CarId == carId));
-        }
-
-        public IDataResult<List<CarDetailDto>> GetByModelYear(string modelYear)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ModelYear == modelYear));
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarDetails(Expression<Func<Car, bool>> filter = null)
-        {
-            if (DateTime.Now.Hour == 24)
-            {
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
-            }
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(filter));
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int brandId)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(b => b.BrandId == brandId));
-        }
-
-        public IDataResult<List<CarDetailDto>> GetCarsByColorId(int colorId)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(co => co.ColorId == colorId));
-        }
-
-        [SecuredOperation("car.update,admin")]
+        //[SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
+        //[CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
+
             _carDal.Update(car);
-            return new SuccessResult(Messages.CarUpdated);
+            return new SuccessResult(Messages.CarUpdate);
+        }
+
+        // [SecuredOperation("admin,car.list")]
+        [CacheAspect]
+
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarListed);
+        }
+
+
+        //  [SecuredOperation("admin,car.list")]
+        //[CacheAspect]
+        //[PerformanceAspect(15)]
+        public IDataResult<List<Car>> GetAll()
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarListed);
+        }
+
+        //  [SecuredOperation("admin,car.list")]
+        [CacheAspect]
+        public IDataResult<List<Car>> GetCarsByBrandId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == id), Messages.CarListed);
+        }
+
+        //  [SecuredOperation("admin,car.list")]
+        [CacheAspect]
+        public IDataResult<List<Car>> GetCarsByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.ColorId == id), Messages.CarListed);
+        }
+
+        [TransactionScopeAspect]
+        public IResult TransactionalOperation(Car car)
+        {
+            _carDal.Update(car);
+            _carDal.Add(car);
+            return new SuccessResult(Messages.CarUpdate);
         }
     }
 }

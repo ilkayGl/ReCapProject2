@@ -13,9 +13,10 @@ namespace Bussines.ValidationRules.FluentValidation
         {
             RuleFor(u => u.FirstName).NotEmpty();
             RuleFor(u => u.LastName).NotEmpty();
-            //RuleFor(u => u.PasswordHash).NotEmpty();
-            //RuleFor(u => u.PasswordHash).MinimumLength(8).WithMessage("Must be at least 8 characters");
-            RuleFor(u => u.Email).EmailAddress().WithMessage("Geçersiz e-posta adresi");
+            RuleFor(u => u.Email).NotEmpty();
+            RuleFor(u => u.Email).EmailAddress();
+            RuleFor(u => u.PasswordSalt).NotEmpty();
+            RuleFor(u => u.PasswordHash).NotEmpty();
         }
     }
 }

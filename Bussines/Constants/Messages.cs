@@ -9,66 +9,63 @@ namespace Bussines.Constants
 {
     public static class Messages
     {
-        //Brand Messages
-        public static string BrandAdded = "Marka Eklendi";
-        public static string BrandUpdated = "Marka Güncellendi";
-        public static string BrandDeleted = "Marka Silindi";
-        public static string BrandsListed = "Markalar Listelendi";
-
-        //Car Messages
-        public static string CarAdded = "Araba Eklendi";
-        public static string CarUpdated = "Araba Güncellendi";
-        public static string CarDeleted = "Araba Silindi";
-        public static string CarsListed = "Arabalar Listelendi";
-
-        //Color Messages
-        public static string ColorAdded = "Renk Eklendi";
-        public static string ColorUpdated = "Renk Güncellendi";
-        public static string ColorDeleted = "Renk Silindi";
-        public static string ColorsListed = "Renkler Listelendi";
-
-        //User Messages
-        public static string UserAdded = "Kullanıcı Eklendi";
-        public static string UserUpdated = "Kullanıcı Güncellendi";
-        public static string UserDeleted = "Kullanıcı Silindi";
-        public static string UsersListed = "Kullanıcılar Listelendi";
-
-        //Customer Messages
-        public static string CustomerAdded = "Müşteri Eklendi";
-        public static string CustomerUpdated = "Müşteri Güncellendi";
-        public static string CustomerDeleted = "Müşteri Silindi";
-        public static string CustomersListed = "Müşteriler Listelendi";
-
-        //CarImage Messages
-        public static string CarImageAdded = "Car Image Eklendi";
-        public static string CarImageUpdated = "Araba Resimi Güncellendi";
-        public static string CarImageDeleted = "Araba Resimi Silindi";
-        public static string CarImagesListed = "Araba Resimleri Listelendi";
-
-        //Rental Messages
-        public static string RentalAdded = "Kira Bilgileri Eklendi";
-        public static string RentalUpdated = "Kira Bilgileri Güncellendi";
-        public static string RentalDeleted = "Kira Bilgileri Silindi";
-        public static string RentalsListed = "Kira Bilgileri Listelendi";
-        public static string RentalReturned = "Kiralanan Araç Başarıyla İade Edildi";
+        public static string CarAdded = ("Car added");
+        public static string CarNameInvalid = ("The car has not been added! The car name must be at least 2 characters");
+        public static string DailyPriceNotEnough = ("The daily price must be greater than 0!");
+        public static string CarUpdate = ("Car updated");
+        public static string CarDelete = ("Car deleted");
+        public static string CarListed = ("Car Listed");
+        public static string CarIdListed = ("Car id Listed");
 
 
+        public static string ColorAdded = ("Color added");
+        public static string ColorUpdate = ("Color updated");
+        public static string ColorDelete = ("Color deleted");
+        public static string ColorListed = ("Color Listed");
+        public static string ColorIdListed = ("Color id Listed");
 
-        //Error Messages
-        public static string BrandNameInvalid = "Marka Adı Geçersiz";
-        public static string CarNameInvalid = "Araç Adı Geçersiz";
-        public static string ColorNameInvalid = "Renk Adı Geçersiz";
-        public static string RentalInvalid = "İstediğiniz Araba Mevcut Değil";
-        public static string MaintenanceTime = "Bakım Modu";
-        public static string CarImageCountOfCarIdError = "Bir arabada sadece 5 fotoğraf olabilir";
-        public static string CarImagePathAlreadyExists = "Araba yolu zaten var";
-        public static string AuthorizationDenied = "Erişim reddedildi. Yetkili değilsin.";
-        public static string UserRegistered = "Kayıt oldu.";
-        public static string UserNotFound = "Kullanıcı bulunamadı.";
-        public static string PasswordError = "Parola hatası.";
-        public static string SuccessfulLogin = "Başarılı giriş.";
-        public static string UserAlreadyExists = "Kullanıcı mevcut.";
-        public static string AccessTokenCreated = "Token oluşturuldu.";
+        public static string BrandAdded = ("Brand added");
+        public static string BrandUpdate = ("Brand updated");
+        public static string BrandDelete = ("Brand deleted");
+        public static string BrandListed = ("Brand Listed");
+        public static string BrandIdListed = ("Brand id Listed");
+
+        public static string UserAdded = ("User added");
+        public static string UserUpdate = ("User updated");
+        public static string UserDelete = ("User deleted");
+        public static string UserListed = ("User Listed");
+        public static string UserIdListed = ("User id Listed");
+
+
+        public static string CustomerAdded = ("Customer added");
+        public static string CustomerUpdate = ("Customer updated");
+        public static string CustomerDelete = ("Customer deleted");
+        public static string CustomerListed = ("Customer Listed");
+        public static string CustomerIdListed = ("Customer id Listed");
+
+        public static string RentalAdded = ("Car rented. Have a nice day!");
+        public static string RentalUpdate = ("Rental updated");
+        public static string RentalDelete = ("Rental deleted");
+        public static string RentalListed = ("Rental Listed");
+        public static string RentalIdListed = ("Rental id Listed");
+        public static string DontAvailable = ("Car already rented. Please chose an other car");
+
+
+        public static string ImageAdded = ("Image added");
+        public static string ImageUpdate = ("Image updated");
+        public static string ImageDelete = ("Image deleted");
+        public static string ImageListed = ("Image Listed");
+        public static string ImageIdListed = ("Image id Listed");
+        public static string ImageLimit = ("You can Upload just 5 Images");
+        public static string EmailListed = ("Email Listed");
+        public static string UserNotFound = ("User not found");
+        public static string UserRegistered = ("User registered");
+        public static string AccessTokenCreated = ("Access Token Created");
+        public static string UserAlreadyExists = ("User Already Exists");
+        public static string SuccessfulLogin = ("Successful Login");
+        public static string PasswordError = ("Password Error");
+        public static string AuthorizationDenied = ("Authorization Denied");
+
 
 
     }
