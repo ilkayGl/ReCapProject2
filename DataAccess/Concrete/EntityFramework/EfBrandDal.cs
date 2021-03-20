@@ -6,31 +6,50 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataAccess.Concrete.EntityFramework
 {
     public class EfBrandDal : EfEntityRepositoryBase<Brand, CarDbContext>, IBrandDal
     {
-        public List<BrandDetailDto> GetBrandDetails()
+        public List<CarBrandDetailDto> GetCarAndBrandDetails()
         {
             using (CarDbContext context = new CarDbContext())
             {
-                var result = from ca in context.Brands
-                             join co in context.Colors
-                             on ca.BrandId equals co.ColorId
+                var result = from c in context.Cars
                              join b in context.Brands
-                             on ca.BrandId equals b.BrandId
-                             select new BrandDetailDto
+                             on c.BrandId equals b.BrandId
+                             join r in context.Rentals
+                             on c.CarId equals r.CarId
+                             select new CarBrandDetailDto
                              {
-                                 BrandId=co.ColorId,
-                                 ColorId = co.ColorId,
-                                 BrandName = ca.BrandName,
-                                 ColorName = co.ColorName,
-
+                                 CarId = c.CarId,
+                                 BrandId = b.BrandId,
+                                 RentalId = r.RentalId,
+                                 RentDate = r.RentDate,
+                                 ReturnDate = r.ReturnDate
                              };
 
                 return result.ToList();
+
             }
         }
+
+        public bool DeleteBrandIfNotReturnDateNull(Brand brand)
+        {
+            using (CarDbContext context = new CarDbContext())
+            {
+                var find = GetCarAndBrandDetails().Any(i => i.BrandId == brand.BrandId && i.ReturnDate == null);
+                if (!find)
+                {
+                    context.Remove(brand);
+                    context.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
     }
 }

@@ -17,28 +17,48 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (CarDbContext context = new CarDbContext())
             {
-                var result = from re in context.Rentals
-                             join ca in context.Cars
-                             on re.CarId equals ca.CarId
+                var result = from c in context.Cars
+                             join r in context.Rentals
+                             on c.CarId equals r.CarId
                              join b in context.Brands
-                             on ca.BrandId equals b.BrandId
-                             join cu in context.Customers
-                             on re.CustomerId equals cu.CustomerId
-                             join us in context.Users
-                             on cu.UserId equals us.UserId
+                             on c.BrandId equals b.BrandId
+                             join color in context.Colors
+                             on c.ColorId equals color.ColorId
+                             join cstmr in context.Customers
+                             on r.CustomerId equals cstmr.CustomerId
                              select new RentalDetailDto
                              {
-                                 RentalId = re.RentalId,
-                                 BrandName = b.BrandName,
-                                 FirstName = us.FirstName,
-                                 LastName = us.LastName,
-                                 RentDate = re.RentDate
-                             };
+                                 RentalId = r.RentalId,
+                                 CustomerId = cstmr.CustomerId,
+                                 CarName = b.BrandName,
+                                 ColorName = color.ColorName,
+                                 CustomerInfo = $"{cstmr.FirstName} {cstmr.LastName}",
+                                 CompanyName = cstmr.CompanyName,
+                                 RentDate = r.RentDate,
+                                 ReturnDate = r.ReturnDate
 
+                             };
                 return result.ToList();
+
             }
         }
 
+
+        public bool DeleteRentalIfNotReturnDateNull(Rental rental)
+        {
+            using (CarDbContext context = new CarDbContext())
+            {
+                var find = context.Rentals.Any(i => i.RentalId == rental.RentalId && i.ReturnDate == null);
+                if (!find)
+                {
+                    context.Remove(rental);
+                    context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+
+        }
 
     }
 }

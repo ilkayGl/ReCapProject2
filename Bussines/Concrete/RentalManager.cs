@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Bussines.Constants;
 using Bussines.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -23,60 +24,77 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
 
-        [ValidationAspect(typeof(RentalValidator))]
-        public IResult Add(Rental rental)
-        {
-            IResult result = BusinessRules.Run(RentCarReturnDateCheck(rental.CarId));
-            if (result != null)
-            {
-                return result;
-            }
-
-
-            _rentalDal.Add(rental);
-            return new SuccessResult(Messages.RentalAdded);
-        }
-
-        public IResult Delete(Rental rental)
-        {
-            _rentalDal.Delete(rental);
-            return new SuccessResult(Messages.RentalDelete);
-        }
-
-        public IResult Update(Rental rental)
-        {
-            _rentalDal.Update(rental);
-            return new SuccessResult(Messages.RentalUpdate);
-        }
-
-        public IDataResult<Rental> Get(int rentalid)
-        {
-            return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.RentalId == rentalid), Messages.RentalIdListed);
-        }
-
+        [CacheAspect]
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalListed);
         }
+
+
+
+        [CacheAspect]
+        public IDataResult<List<Rental>> GetRentalByUndelivered()
+        {
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r => r.ReturnDate == null), Messages.RentalListed);
+        }
+
+
+
+        [CacheAspect]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(), Messages.RentalListed);
         }
 
-        private IResult RentCarReturnDateCheck(int carId)
+
+
+        [CacheAspect]
+        public IDataResult<Rental> GetById(int carId)
         {
-            var result = _rentalDal.GetAll(r => r.CarId == carId);
-            if (result.Count > 0)
+            return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.CarId == carId), Messages.RentalListed);
+        }
+
+
+
+
+        [CacheRemoveAspect("IRentalService.Get")]
+        [ValidationAspect(typeof(RentalValidator), Priority = 1)]
+        public IResult Add(Rental rental)
+        {
+            if (rental.ReturnDate == null)
             {
-                foreach (var rent in result)
-                {
-                    if (rent.ReturnDate == null)
-                    {
-                        return new ErrorResult(Messages.DontAvailable);
-                    }
-                }
+                return new ErrorResult(Messages.NotAvailable);
             }
-            return new SuccessResult();
+            else
+            {
+                _rentalDal.Add(rental);
+                return new SuccessResult(Messages.RentalAdded);
+            }
+        }
+
+
+
+        [CacheRemoveAspect("IRentalService.Get")]
+        public IResult Delete(Rental rental)
+        {
+            var result = _rentalDal.DeleteRentalIfNotReturnDateNull(rental);
+            if (result)
+            {
+                return new SuccessResult(Messages.RentalDelete);
+            }
+
+            return new ErrorResult(Messages.NotDeleted);
+        }
+
+
+
+
+        [ValidationAspect(typeof(RentalValidator), Priority = 1)]
+        [CacheRemoveAspect("IRentalService.Get")]
+        public IResult Update(Rental rental)
+        {
+            _rentalDal.Update(rental);
+            return new SuccessResult(Messages.RentalUpdate);
         }
     }
 }

@@ -14,58 +14,18 @@ namespace WepAPI.Controllers
     public class CustomersController : ControllerBase
     {
         ICustomerService _customerService;
+        IRentalService _rentalService;
 
-        public CustomersController(ICustomerService customerService)
+        public CustomersController(ICustomerService customerService, IRentalService rentalService)
         {
             _customerService = customerService;
-        }
-
-        [HttpPost("add")]
-
-        public IActionResult Add(Customer customer)
-        {
-            var result = _customerService.Add(customer);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-
-        [HttpPost("delete")]
-
-        public IActionResult Delete(Customer customer)
-        {
-            var result = _customerService.Delete(customer);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-
-        [HttpPost("update")]
-
-        public IActionResult Update(Customer customer)
-        {
-            var result = _customerService.Update(customer);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+            _rentalService = rentalService;
         }
 
         [HttpGet("getall")]
-        public IActionResult Getall()
+        public IActionResult GetAll()
         {
             var result = _customerService.GetAll();
-
             if (result.Success)
             {
                 return Ok(result);
@@ -73,18 +33,53 @@ namespace WepAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getid")]
 
-        public IActionResult Get(int id)
+
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int customerId)
         {
-            var result = _customerService.Get(id);
-
+            var result = _customerService.GetById(customerId);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
+        }
 
+
+
+        [HttpPost("add")]
+        public IActionResult Add(Customer customer)
+        {
+
+            var result = _customerService.Add(customer);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update(Customer customer)
+        {
+            var result = _customerService.Update(customer);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("delete")]
+        public IActionResult Delete(Customer customer)
+        {
+            var result = _customerService.Delete(customer);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
 

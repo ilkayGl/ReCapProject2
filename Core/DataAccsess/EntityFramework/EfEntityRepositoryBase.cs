@@ -16,11 +16,9 @@ namespace Core.DataAccsess.EntityFramework
         {
             using (TContext context = new TContext())
             {
-                var addedEntity = context.Entry(entity);
-
-                addedEntity.State = EntityState.Added;
-                context.SaveChanges();
-
+                var addedEntity = context.Entry(entity); // veri tabanı bağlantısındaki entity ye abone ol, addedEntity değişkenine at.
+                addedEntity.State = EntityState.Added; // addedEntity değişkeni üzerinden, durumu ekleme komutuna çek ve ekleme işlemini gerçekleştir.
+                context.SaveChanges(); // veritabanı bağlantısı üzerinden değişiklikleri kaydet.
             }
         }
 
@@ -28,11 +26,25 @@ namespace Core.DataAccsess.EntityFramework
         {
             using (TContext context = new TContext())
             {
-                var deleteEntity = context.Entry(entity);
-
-                deleteEntity.State = EntityState.Deleted;
+                var deletedEntity = context.Entry(entity);
+                deletedEntity.State = EntityState.Deleted;
                 context.SaveChanges();
+            }
+        }
 
+        public TEntity Get(Func<TEntity, bool> filter)
+        {
+            using (TContext context = new TContext())
+            {
+                return context.Set<TEntity>().FirstOrDefault(filter);
+            }
+        }
+
+        public List<TEntity> GetAll(Func<TEntity, bool> filter = null)
+        {
+            using (TContext context = new TContext())
+            {
+                return filter == null ? context.Set<TEntity>().ToList() : context.Set<TEntity>().Where(filter).ToList();
             }
         }
 
@@ -41,30 +53,8 @@ namespace Core.DataAccsess.EntityFramework
             using (TContext context = new TContext())
             {
                 var updatedEntity = context.Entry(entity);
-
                 updatedEntity.State = EntityState.Modified;
                 context.SaveChanges();
-
-            }
-        }
-
-        public TEntity Get(Expression<Func<TEntity, bool>> filter)
-        {
-            using (TContext context = new TContext())
-            {
-
-                return context.Set<TEntity>().SingleOrDefault(filter);
-
-            }
-        }
-
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
-        {
-            using (TContext context = new TContext())
-            {
-                return filter == null
-                    ? context.Set<TEntity>().ToList()
-                    : context.Set<TEntity>().Where(filter).ToList();
             }
         }
     }

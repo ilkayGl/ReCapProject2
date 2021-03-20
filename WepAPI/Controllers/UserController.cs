@@ -21,40 +21,45 @@ namespace WepAPI.Controllers
             _userService = userService;
         }
 
-        [HttpPost("add")]
+        [HttpGet("getall")]
+        public IActionResult GetAll()
+        {
+            var result = _userService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int userId)
+        {
+            var result = _userService.GetById(userId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
+
+        [HttpPost("add")]
         public IActionResult Add(User user)
         {
             var result = _userService.Add(user);
-
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-
-
-        [HttpPost("delete")]
-
-        public IActionResult Delete(User user)
-        {
-            var result = _userService.Delete(user);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
 
         [HttpPost("update")]
-
         public IActionResult Update(User user)
         {
             var result = _userService.Update(user);
-
             if (result.Success)
             {
                 return Ok(result);
@@ -62,30 +67,15 @@ namespace WepAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getclaims")]
-        public IActionResult GetClaims(User user)
+        [HttpPost("delete")]
+        public IActionResult Delete(User user)
         {
-            var result = _userService.GetClaims(user);
-
+            var result = _userService.Delete(user);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
-        }
-
-        [HttpGet("getid")]
-
-        public IActionResult GetByMail(string email)
-        {
-            var result = _userService.GetByMail(email);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-
         }
     }
 }

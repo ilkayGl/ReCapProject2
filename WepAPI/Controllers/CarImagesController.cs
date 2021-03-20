@@ -12,36 +12,64 @@ namespace WepAPI.Controllers
     [ApiController]
     public class CarImagesController : ControllerBase
     {
-        ICarImageService _carImageService;
+        ICarImageService _imageService;
 
-
-        public CarImagesController(ICarImageService carImageService)
+        public CarImagesController(ICarImageService imageService)
         {
-            _carImageService = carImageService;
-
+            _imageService = imageService;
         }
 
-        [HttpPost("add")]
-        public IActionResult Add(IFormFile file, [FromForm] CarImage carImage)
+        [HttpGet("getall")]
+        public IActionResult GetAll()
         {
+            var result = _imageService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
-            var result = _carImageService.Add(file, carImage);
+        [HttpGet("getimagesbycar")]
+        public IActionResult GetImagesByCar(int carId)
+        {
+            var result = _imageService.GetImagesByCarId(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int imageId)
+        {
+            var result = _imageService.GetById(imageId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
+
+        [HttpPost("add")]
+        public IActionResult Add([FromForm] IFormFile[] files, [FromForm] CarImage carImage)
+        {
+            var result = _imageService.AddCollective(files, carImage);
             if (result.Success)
             {
                 return Ok(result);
             }
 
             return BadRequest(result);
-
         }
 
         [HttpPost("update")]
-        public IActionResult Update(IFormFile file, [FromForm(Name = ("Id"))] int Id)
+        public IActionResult Update([FromForm] IFormFile file, [FromForm] CarImage carImage)
         {
-            var carImage = _carImageService.Get(Id).Data;
-            var result = _carImageService.Update(file, carImage);
-
+            var result = _imageService.Update(file, carImage);
             if (result.Success)
             {
                 return Ok(result);
@@ -52,22 +80,7 @@ namespace WepAPI.Controllers
         [HttpPost("delete")]
         public IActionResult Delete(CarImage carImage)
         {
-
-            var result = _carImageService.Delete(carImage);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getbycarid")]
-
-        public IActionResult GetCarImageByCarId(int id)
-        {
-            var result = _carImageService.GetCarImageByCarId(id);
-
+            var result = _imageService.Delete(carImage);
             if (result.Success)
             {
                 return Ok(result);

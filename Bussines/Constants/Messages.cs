@@ -65,8 +65,10 @@ namespace Bussines.Constants
         public static string SuccessfulLogin = ("Successful Login");
         public static string PasswordError = ("Password Error");
         public static string AuthorizationDenied = ("Authorization Denied");
+        public static string NotDeleted = ("NotDeleted");
 
+        public static string InvalidEntry = ("InavlidEntry");
 
-
+        public static string NotAvailable = ("Not Available");
     }
 }

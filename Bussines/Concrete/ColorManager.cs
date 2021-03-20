@@ -2,6 +2,7 @@
 using Bussines.Abstract;
 using Bussines.Constants;
 using Bussines.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -21,33 +22,54 @@ namespace Bussines.Concrete
             _colorDal = colorDal;
         }
 
-        [ValidationAspect(typeof(ColorValidator))]
+        //[CacheAspect]
+        public IDataResult<List<Color>> GetAll()
+        {
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
+        }
+
+
+
+
+        [CacheAspect]
+        public IDataResult<Color> GetById(int colorId)
+        {
+            return new SuccessDataResult<Color>(_colorDal.Get(c => c.ColorId == colorId), Messages.ColorListed);
+        }
+
+
+
+        [ValidationAspect(typeof(ColorValidator), Priority = 1)]
+        [CacheRemoveAspect("IColorService.Get")]
         public IResult Add(Color color)
         {
             _colorDal.Add(color);
             return new SuccessResult(Messages.ColorAdded);
         }
 
-        public IResult Delete(Color color)
-        {
-            _colorDal.Delete(color);
-            return new SuccessResult(Messages.ColorDelete);
-        }
 
+
+
+        [ValidationAspect(typeof(ColorValidator), Priority = 1)]
+        [CacheRemoveAspect("IColorService.Get")]
         public IResult Update(Color color)
         {
             _colorDal.Update(color);
             return new SuccessResult(Messages.ColorUpdate);
         }
 
-        public IDataResult<Color> Get(int colorId)
-        {
-            return new SuccessDataResult<Color>(_colorDal.Get(c => c.ColorId == colorId), Messages.ColorIdListed);
-        }
 
-        public IDataResult<List<Color>> GetAll()
+
+        [CacheRemoveAspect("IColorService.Get")]
+        public IResult Delete(Color color)
         {
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
+            var result = _colorDal.DeleteColorIfNotReturnDateNull(color);
+            if (result)
+            {
+                return new SuccessResult(Messages.ColorDelete);
+            }
+            return new ErrorResult(Messages.NotDeleted);
+
         }
 
     }

@@ -2,6 +2,7 @@
 using Bussines.Abstract;
 using Bussines.Constants;
 using Bussines.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
@@ -23,38 +24,54 @@ namespace Bussines.Concrete
             _brandDal = brandDal;
         }
 
-        [ValidationAspect(typeof(BrandValidator))]
+        //[CacheAspect]
+        public IDataResult<List<Brand>> GetAll()
+        {
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandListed);
+
+        }
+
+
+        [CacheAspect]
+        public IDataResult<Brand> GetById(int brandId)
+        {
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.BrandId == brandId), Messages.BrandListed);
+        }
+
+
+
+        [ValidationAspect(typeof(BrandValidator), Priority = 1)]
+        [SecuredOperation("admin, product.add")]
+        [CacheRemoveAspect("IBrandService.Get")]
         public IResult Add(Brand brand)
         {
             _brandDal.Add(brand);
             return new SuccessResult(Messages.BrandAdded);
+
         }
 
-        public IResult Delete(Brand brand)
-        {
-            _brandDal.Delete(brand);
-            return new SuccessResult(Messages.BrandDelete);
-        }
 
+
+        [ValidationAspect(typeof(BrandValidator), Priority = 1)]
+        [CacheRemoveAspect("IBrandService.Get")]
         public IResult Update(Brand brand)
         {
             _brandDal.Update(brand);
             return new SuccessResult(Messages.BrandUpdate);
         }
 
-        public IDataResult<Brand> Get(int brandId)
-        {
-            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.BrandId == brandId), Messages.BrandIdListed);
-        }
 
-        public IDataResult<List<Brand>> GetAll()
-        {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandListed);
-        }
 
-        public IDataResult<List<BrandDetailDto>> GetBrandDetails()
+
+        [CacheRemoveAspect("IBrandService.Get")]
+        public IResult Delete(Brand brand)
         {
-            return new SuccessDataResult<List<BrandDetailDto>>(_brandDal.GetBrandDetails(), Messages.BrandListed);
+            var result = _brandDal.DeleteBrandIfNotReturnDateNull(brand);
+            if (result)
+            {
+                return new SuccessResult(Messages.BrandDelete);
+            }
+            return new ErrorResult(Messages.NotDeleted);
         }
     }
 }
